@@ -1,12 +1,14 @@
 grammar AssetSelection;
 
+start: expr EOF;
+
 // Root rule for parsing expressions
 expr
     : assetExpr                                    # AssetExpression
-    | keyValueExpr                                 # KeyValueExpression
-    | traversal expr                               # LeftTraversalExpression
-    | traversal expr traversal                     # BothTraversalExpression
-    | expr traversal                               # RightTraversalExpression
+    | attributeExpr                                # AttributeExpression
+    | traversal expr                               # UpTraversalExpression
+    | traversal expr traversal                     # UpAndDownTraversalExpression
+    | expr traversal                               # DownTraversalExpression
     | NOT expr                                     # NotExpression
     | expr AND expr                                # AndExpression
     | expr OR expr                                 # OrExpression
@@ -26,13 +28,13 @@ functionName
     | ROOTS
     ;
 
-// Key-value expressions for specific attributes
-keyValueExpr
-    : TAG COLON value (EQUAL value)?               # TagKeyValuePair
-    | OWNER COLON value                            # OwnerKeyValuePair
-    | GROUP COLON value                            # GroupKeyValuePair
-    | KIND COLON value                             # KindKeyValuePair
-    | REPO COLON value                             # RepoKeyValuePair
+// Attribute expressions for specific attributes
+attributeExpr
+    : TAG COLON value (EQUAL value)?               # TagAttributeExpr
+    | OWNER COLON value                            # OwnerAttributeExpr
+    | GROUP COLON value                            # GroupAttributeExpr
+    | KIND COLON value                             # KindAttributeExpr
+    | CODELOCATION COLON value                     # CodeLocationAttributeExpr
     ;
 
 // Define the EQUAL token for tag:value=value syntax
@@ -69,7 +71,7 @@ OWNER : 'owner';
 GROUP : 'group';
 TAG : 'tag';
 KIND : 'kind';
-REPO : 'repo';
+CODELOCATION : 'codelocation';
 
 // Tokens for function names
 SINKS : 'sinks';
