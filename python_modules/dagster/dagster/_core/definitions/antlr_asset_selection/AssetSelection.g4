@@ -34,7 +34,7 @@ attributeExpr
     | OWNER COLON value                            # OwnerAttributeExpr
     | GROUP COLON value                            # GroupAttributeExpr
     | KIND COLON value                             # KindAttributeExpr
-    | CODELOCATION COLON value                     # CodeLocationAttributeExpr
+    | CODE_LOCATION COLON value                    # CodeLocationAttributeExpr
     ;
 
 // Define the EQUAL token for tag:value=value syntax
@@ -71,7 +71,7 @@ OWNER : 'owner';
 GROUP : 'group';
 TAG : 'tag';
 KIND : 'kind';
-CODELOCATION : 'codelocation';
+CODE_LOCATION : 'code_location';
 
 // Tokens for function names
 SINKS : 'sinks';
