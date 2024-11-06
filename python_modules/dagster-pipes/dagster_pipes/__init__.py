@@ -84,6 +84,10 @@ class PipesOpenedData(TypedDict):
     """
 
     extras: Mapping[str, Any]
+    log_writer: Optional["PipesLogWriterOpenedData"]
+
+
+DAGSTER_PIPES_LOG_WRITER_KEY = "log_writer"
 
 
 class PipesMessage(TypedDict):
@@ -512,7 +516,35 @@ class PipesContextLoader(ABC):
 T_MessageChannel = TypeVar("T_MessageChannel", bound="PipesMessageWriterChannel")
 
 
+class PipesLogWriterChannel(ABC):
+    @contextmanager
+    @abstractmethod
+    def capture(self, capturing_started: Event, is_session_closed: Event) -> Iterator[None]: ...
+
+
+T_LogChannel = TypeVar("T_LogChannel", bound=PipesLogWriterChannel)
+
+
+class PipesLogWriterOpenedData(TypedDict):
+    extras: PipesExtras
+
+
+class PipesLogWriter(ABC, Generic[T_LogChannel]):
+    @abstractmethod
+    @contextmanager
+    def open(self, params: PipesParams) -> Iterator[T_LogChannel]: ...
+
+    @final
+    def get_opened_payload(self) -> PipesLogWriterOpenedData:
+        return {"extras": self.get_opened_extras()}
+
+    def get_opened_extras(self) -> PipesExtras:
+        return {}
+
+
 class PipesMessageWriter(ABC, Generic[T_MessageChannel]):
+    _log_writer: Optional["PipesLogWriter"]
+
     @abstractmethod
     @contextmanager
     def open(self, params: PipesParams) -> Iterator[T_MessageChannel]:
@@ -539,7 +571,12 @@ class PipesMessageWriter(ABC, Generic[T_MessageChannel]):
         This method should not be overridden by users. Instead, users should
         override `get_opened_extras` to inject custom data.
         """
-        return {"extras": self.get_opened_extras()}
+        payload = {"extras": self.get_opened_extras()}
+
+        if self.has_log_writer:
+            payload[DAGSTER_PIPES_LOG_WRITER_KEY] = self.log_writer.get_opened_payload()
+
+        return cast(PipesOpenedData, payload)
 
     def get_opened_extras(self) -> PipesExtras:
         """Return arbitary reader-specific information to be passed back to the orchestration
@@ -549,6 +586,18 @@ class PipesMessageWriter(ABC, Generic[T_MessageChannel]):
             PipesExtras: A dict of arbitrary data to be passed back to the orchestration process.
         """
         return {}
+
+    @property
+    def has_log_writer(self) -> bool:
+        return hasattr(self, "_log_writer") and self._log_writer is not None
+
+    @property
+    def log_writer(self) -> "PipesLogWriter":
+        if not self.has_log_writer or self._log_writer is None:
+            raise DagsterPipesError(
+                "The PipesMessageWriter does not have a PipesLogWriter attached."
+            )
+        return self._log_writer
 
 
 class PipesMessageWriterChannel(ABC):
@@ -592,8 +641,9 @@ T_BlobStoreMessageWriterChannel = TypeVar(
 class PipesBlobStoreMessageWriter(PipesMessageWriter[T_BlobStoreMessageWriterChannel]):
     """Message writer channel that periodically uploads message chunks to some blob store endpoint."""
 
-    def __init__(self, *, interval: float = 10):
+    def __init__(self, *, interval: float = 10, log_writer: Optional[PipesLogWriter] = None):
         self.interval = interval
+        self._log_writer = log_writer
 
     @contextmanager
     def open(self, params: PipesParams) -> Iterator[T_BlobStoreMessageWriterChannel]:
@@ -911,8 +961,10 @@ class PipesS3MessageWriter(PipesBlobStoreMessageWriter):
     """
 
     # client is a boto3.client("s3") object
-    def __init__(self, client: Any, *, interval: float = 10):
-        super().__init__(interval=interval)
+    def __init__(
+        self, client: Any, *, interval: float = 10, log_writer: Optional[PipesLogWriter] = None
+    ):
+        super().__init__(interval=interval, log_writer=log_writer)
         # Not checking client type for now because it's a boto3.client object and we don't want to
         # depend on boto3.
         self._client = client
@@ -1124,7 +1176,13 @@ class PipesContext:
         self._io_stack = ExitStack()
         self._data = self._io_stack.enter_context(context_loader.load_context(context_params))
         self._message_channel = self._io_stack.enter_context(message_writer.open(messages_params))
+
+        if message_writer.log_writer is not None:
+            log_writer_params = messages_params.get(DAGSTER_PIPES_LOG_WRITER_KEY, {})
+            self._io_stack.enter_context(message_writer.log_writer.open(log_writer_params))
+
         opened_payload = message_writer.get_opened_payload()
+
         self._message_channel.write_message(_make_message("opened", opened_payload))
         self._logger = _PipesLogger(self)
         self._materialized_assets: Set[str] = set()
