@@ -940,6 +940,9 @@ class PipesDefaultMessageWriter(PipesMessageWriter):
     STDERR = "stderr"
     STDOUT = "stdout"
 
+    def __init__(self, log_writer: Optional[PipesLogWriter] = None) -> None:
+        self._log_writer = log_writer
+
     @contextmanager
     def open(self, params: PipesParams) -> Iterator[PipesMessageWriterChannel]:
         if self.FILE_PATH_KEY in params:

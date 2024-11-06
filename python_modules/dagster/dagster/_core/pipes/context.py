@@ -1,4 +1,5 @@
 import os
+import sys
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -9,6 +10,7 @@ from typing import (
     Any,
     Dict,
     Iterator,
+    Literal,
     Mapping,
     Optional,
     Sequence,
@@ -51,7 +53,7 @@ from dagster._core.definitions.time_window_partitions import (
     TimeWindow,
     has_one_dimension_time_window_partitioning,
 )
-from dagster._core.errors import DagsterPipesExecutionError
+from dagster._core.errors import DagsterInvariantViolationError, DagsterPipesExecutionError
 from dagster._core.events import EngineEventData
 from dagster._core.execution.context.asset_execution_context import AssetExecutionContext
 from dagster._core.execution.context.invocation import BaseDirectExecutionContext
@@ -182,6 +184,8 @@ class PipesMessageHandler:
             self._handle_report_asset_check(**message["params"])  # type: ignore
         elif method == "log":
             self._handle_log(**message["params"])  # type: ignore
+        elif method == "log_stdio":
+            self._handle_log_stdio(**message["params"])  # type: ignore
         elif method == "report_custom_message":
             self._handle_extra_message(**message["params"])  # type: ignore
         else:
@@ -250,6 +254,16 @@ class PipesMessageHandler:
     def _handle_log(self, message: str, level: str = "info") -> None:
         check.str_param(message, "message")
         self._context.log.log(level, message)
+
+    def _handle_log_stdio(
+        self, stream: Literal["stdout", "stderr"], text: str, extras: Optional[PipesExtras] = None
+    ):
+        if stream == "stdout":
+            sys.stdout.write(text)
+        elif stream == "stderr":
+            sys.stderr.write(text)
+        else:
+            raise DagsterInvariantViolationError(f"Unexpected stream: {stream}")
 
     def _handle_extra_message(self, payload: Any):
         self._extra_msg_queue.put(payload)
