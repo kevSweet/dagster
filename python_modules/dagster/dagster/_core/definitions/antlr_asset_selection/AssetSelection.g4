@@ -4,8 +4,7 @@ start: expr EOF;
 
 // Root rule for parsing expressions
 expr
-    : assetExpr                                    # AssetExpression
-    | attributeExpr                                # AttributeExpression
+    : attributeExpr                                # AttributeExpression
     | traversal expr                               # UpTraversalExpression
     | traversal expr traversal                     # UpAndDownTraversalExpression
     | expr traversal                               # DownTraversalExpression
@@ -14,6 +13,7 @@ expr
     | expr OR expr                                 # OrExpression
     | functionName LPAREN expr RPAREN              # FunctionCallExpression
     | LPAREN expr RPAREN                           # ParenthesizedExpression
+    | STAR                                         # AllExpression
     ;
 
 // Traversal operators
@@ -30,7 +30,9 @@ functionName
 
 // Attribute expressions for specific attributes
 attributeExpr
-    : TAG COLON value (EQUAL value)?               # TagAttributeExpr
+    : KEY COLON value                              # KeyExpr
+    | KEY_SUBSET COLON value                       # KeySubsetExpr
+    | TAG COLON value (EQUAL value)?               # TagAttributeExpr
     | OWNER COLON value                            # OwnerAttributeExpr
     | GROUP COLON value                            # GroupAttributeExpr
     | KIND COLON value                             # KindAttributeExpr
@@ -44,12 +46,6 @@ EQUAL : '=';
 value
     : QUOTED_STRING
     | UNQUOTED_STRING
-    ;
-
-// Asset expressions
-assetExpr
-    : QUOTED_STRING                                # ExactMatchAsset
-    | UNQUOTED_STRING                              # PrefixMatchAsset
     ;
 
 // Tokens for operators and keywords
@@ -66,7 +62,9 @@ LPAREN : '(';
 RPAREN : ')';
 COMMA : ',';
 
-// Tokens for keys
+// Tokens for attributes
+KEY : 'key';
+KEY_SUBSET : 'key_subset';
 OWNER : 'owner';
 GROUP : 'group';
 TAG : 'tag';
