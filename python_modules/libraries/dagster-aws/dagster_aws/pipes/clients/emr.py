@@ -90,12 +90,14 @@ class PipesEMRClient(PipesClient, TreatAsResourceParam):
         context_injector: Optional[PipesContextInjector] = None,
         forward_termination: bool = True,
         wait_for_s3_logs_seconds: int = 10,
+        stdio_from_messages: bool = False,
     ):
         self._client = client or boto3.client("emr")
         self._message_reader = message_reader
         self._context_injector = context_injector or PipesEnvContextInjector()
         self.forward_termination = check.bool_param(forward_termination, "forward_termination")
         self.wait_for_s3_logs_seconds = wait_for_s3_logs_seconds
+        self.stdio_from_messages = stdio_from_messages
 
     @property
     def client(self) -> "EMRClient":
@@ -244,6 +246,9 @@ class PipesEMRClient(PipesClient, TreatAsResourceParam):
         context: Union[OpExecutionContext, AssetExecutionContext],
         response: "RunJobFlowOutputTypeDef",
     ):
+        if self.stdio_from_messages:
+            return
+
         cluster = self.client.describe_cluster(ClusterId=response["JobFlowId"])
 
         cluster_id = cluster["Cluster"]["Id"]  # type: ignore
