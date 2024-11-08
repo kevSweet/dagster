@@ -31,7 +31,7 @@ functionName
 // Attribute expressions for specific attributes
 attributeExpr
     : KEY COLON value                              # KeyExpr
-    | KEY_SUBSET COLON value                       # KeySubsetExpr
+    | KEY_SUBSTRING COLON value                    # KeySubstringExpr
     | TAG COLON value (EQUAL value)?               # TagAttributeExpr
     | OWNER COLON value                            # OwnerAttributeExpr
     | GROUP COLON value                            # GroupAttributeExpr
@@ -64,7 +64,7 @@ COMMA : ',';
 
 // Tokens for attributes
 KEY : 'key';
-KEY_SUBSET : 'key_subset';
+KEY_SUBSTRING : 'key_substring';
 OWNER : 'owner';
 GROUP : 'group';
 TAG : 'tag';
