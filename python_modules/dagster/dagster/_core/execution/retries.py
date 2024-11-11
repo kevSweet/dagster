@@ -1,6 +1,7 @@
 from collections import defaultdict
+from collections.abc import Mapping
 from enum import Enum
-from typing import Mapping, Optional
+from typing import Optional
 
 from dagster import (
     Field,

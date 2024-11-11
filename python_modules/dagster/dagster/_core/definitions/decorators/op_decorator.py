@@ -1,3 +1,4 @@
+from collections.abc import Mapping, Sequence
 from functools import lru_cache, update_wrapper
 from inspect import Parameter
 from typing import (
@@ -5,11 +6,8 @@ from typing import (
     AbstractSet,
     Any,
     Callable,
-    List,
-    Mapping,
     NamedTuple,
     Optional,
-    Sequence,
     Union,
     cast,
     overload,
@@ -411,7 +409,7 @@ def resolve_checked_op_fn_inputs(
     inputs_to_infer = set()
     has_kwargs = False
 
-    for param in cast(List[Parameter], input_args):
+    for param in cast(list[Parameter], input_args):
         if param.kind == Parameter.VAR_KEYWORD:
             has_kwargs = True
         elif param.kind == Parameter.VAR_POSITIONAL:

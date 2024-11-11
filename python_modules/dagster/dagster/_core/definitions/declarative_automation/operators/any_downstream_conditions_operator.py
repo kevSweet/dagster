@@ -1,4 +1,5 @@
-from typing import AbstractSet, Mapping, Sequence
+from collections.abc import Mapping, Sequence
+from typing import AbstractSet
 
 from dagster._core.definitions.asset_key import AssetKey
 from dagster._core.definitions.declarative_automation.automation_condition import (

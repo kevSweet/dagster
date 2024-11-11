@@ -1,4 +1,5 @@
-from typing import AbstractSet, Any, Mapping, Optional, cast
+from collections.abc import Mapping
+from typing import AbstractSet, Any, Optional, cast
 
 from dagster import (
     DagsterRun,

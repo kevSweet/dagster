@@ -1,4 +1,5 @@
-from typing import Sequence, Type, cast
+from collections.abc import Sequence
+from typing import cast
 
 from dagster import AssetExecutionContext, AssetsDefinition, Failure, multi_asset
 from dagster._annotations import experimental
@@ -17,7 +18,7 @@ from dagster_looker.api.resource import LookerResource
 def build_looker_pdt_assets_definitions(
     resource_key: str,
     request_start_pdt_builds: Sequence[RequestStartPdtBuild],
-    dagster_looker_translator: Type[DagsterLookerApiTranslator] = DagsterLookerApiTranslator,
+    dagster_looker_translator: type[DagsterLookerApiTranslator] = DagsterLookerApiTranslator,
 ) -> Sequence[AssetsDefinition]:
     """Returns the AssetsDefinitions of the executable assets for the given the list of refreshable PDTs.
 

@@ -1,17 +1,7 @@
 from abc import ABC, abstractmethod
+from collections.abc import Mapping, Sequence
 from types import FunctionType
-from typing import (
-    TYPE_CHECKING,
-    AbstractSet,
-    Any,
-    Callable,
-    Dict,
-    Mapping,
-    Optional,
-    Sequence,
-    TypeVar,
-    Union,
-)
+from typing import TYPE_CHECKING, AbstractSet, Any, Callable, Optional, TypeVar, Union
 
 import dagster._check as check
 from dagster._annotations import public
@@ -338,7 +328,7 @@ class CachingRepositoryData(RepositoryData):
         return resolve_partitioned_asset_schedule
 
     @staticmethod
-    def from_dict(repository_definitions: Dict[str, Dict[str, Any]]) -> "CachingRepositoryData":
+    def from_dict(repository_definitions: dict[str, dict[str, Any]]) -> "CachingRepositoryData":
         """Static constructor.
 
         Args:

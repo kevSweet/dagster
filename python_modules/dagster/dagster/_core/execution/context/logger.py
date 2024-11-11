@@ -74,7 +74,7 @@ class UnboundInitLoggerContext(InitLoggerContext):
     """
 
     def __init__(self, logger_config: Any, job_def: Optional[JobDefinition]):
-        super(UnboundInitLoggerContext, self).__init__(
+        super().__init__(
             logger_config, logger_def=None, job_def=job_def, run_id=None
         )
 

@@ -1,8 +1,9 @@
 import dataclasses
 import itertools
+from collections.abc import Sequence
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
-from typing import Any, Callable, NamedTuple, Optional, Sequence, Tuple, Type, cast
+from typing import Any, Callable, NamedTuple, Optional, cast
 
 import dagster._check as check
 from dagster import AssetKey, DagsterInstance, RunRequest, RunsFilter
@@ -75,7 +76,7 @@ class AssetRuleEvaluationSpec(NamedTuple):
     rule_evaluation_data: Optional[AutoMaterializeRuleEvaluationData] = None
 
     def with_rule_evaluation_data(
-        self, data_type: Type[AutoMaterializeRuleEvaluationData], **kwargs
+        self, data_type: type[AutoMaterializeRuleEvaluationData], **kwargs
     ) -> "AssetRuleEvaluationSpec":
         """Adds rule evaluation data of the given type to this spec. Formats keyword which are sets
         of CoercibleToAssetKey into frozensets of AssetKey for convenience.
@@ -137,7 +138,7 @@ class AssetDaemonScenarioState(ScenarioState):
 
     def _evaluate_tick_fast(
         self,
-    ) -> Tuple[Sequence[RunRequest], AssetDaemonCursor, Sequence[AutomationConditionEvaluation]]:
+    ) -> tuple[Sequence[RunRequest], AssetDaemonCursor, Sequence[AutomationConditionEvaluation]]:
         try:
             cursor = deserialize_value(self.serialized_cursor, AssetDaemonCursor)
         except DeserializationError:
@@ -178,7 +179,7 @@ class AssetDaemonScenarioState(ScenarioState):
 
     def _evaluate_tick_daemon(
         self,
-    ) -> Tuple[
+    ) -> tuple[
         Sequence[RunRequest],
         AssetDaemonCursor,
         Sequence[AutomationConditionEvaluation],
@@ -357,7 +358,7 @@ class AssetDaemonScenarioState(ScenarioState):
         the set of runs specified in the expected_run_requests argument.
         """
 
-        def sort_run_request_key_fn(run_request) -> Tuple[AssetKey, Optional[str]]:
+        def sort_run_request_key_fn(run_request) -> tuple[AssetKey, Optional[str]]:
             return (min(run_request.asset_selection), run_request.partition_key)
 
         sorted_run_requests = sorted(self.run_requests, key=sort_run_request_key_fn)

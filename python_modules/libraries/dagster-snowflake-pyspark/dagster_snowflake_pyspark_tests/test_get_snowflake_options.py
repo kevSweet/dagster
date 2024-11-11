@@ -1,4 +1,3 @@
-from typing import Dict
 
 import pytest
 from dagster._check import CheckError
@@ -8,7 +7,7 @@ from dagster_snowflake_pyspark.snowflake_pyspark_type_handler import _get_snowfl
 
 
 @pytest.fixture
-def snowflake_config() -> Dict[str, str]:
+def snowflake_config() -> dict[str, str]:
     return {
         "account": "account",
         "user": "user",

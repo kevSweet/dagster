@@ -15,7 +15,7 @@ from dagster import Out, file_relative_path, job, op
 class DivisibleByFiveConstraint(ColumnConstraint):
     def __init__(self):
         message = "Value must be divisible by 5"
-        super(DivisibleByFiveConstraint, self).__init__(
+        super().__init__(
             error_description=message, markdown_description=message
         )
 

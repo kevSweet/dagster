@@ -1,4 +1,3 @@
-from typing import Dict, Tuple
 
 from dagster._core.execution.context.input import InputContext
 from dagster._core.execution.context.output import OutputContext
@@ -11,7 +10,7 @@ class InMemoryIOManager(IOManager):
     """
 
     def __init__(self):
-        self.values: Dict[Tuple[object, ...], object] = {}
+        self.values: dict[tuple[object, ...], object] = {}
 
     def handle_output(self, context: OutputContext, obj: object):
         keys = tuple(context.get_identifier())

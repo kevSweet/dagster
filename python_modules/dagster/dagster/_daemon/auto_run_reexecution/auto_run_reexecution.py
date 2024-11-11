@@ -1,5 +1,6 @@
 import sys
-from typing import Iterator, Optional, Sequence, Tuple, cast
+from collections.abc import Iterator, Sequence
+from typing import Optional, cast
 
 from dagster._core.definitions.metadata import MetadataValue
 from dagster._core.definitions.selector import JobSubsetSelector
@@ -23,7 +24,7 @@ DEFAULT_REEXECUTION_POLICY = ReexecutionStrategy.FROM_FAILURE
 
 def filter_runs_to_should_retry(
     runs: Sequence[DagsterRun], instance: DagsterInstance, default_max_retries: int
-) -> Iterator[Tuple[DagsterRun, int]]:
+) -> Iterator[tuple[DagsterRun, int]]:
     """Return only runs that should retry along with their retry number (1st retry, 2nd, etc.)."""
 
     def get_retry_number(run: DagsterRun) -> Optional[int]:

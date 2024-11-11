@@ -6,10 +6,11 @@ import sys
 import threading
 import zlib
 from collections import defaultdict
+from collections.abc import Mapping, Sequence
 from concurrent.futures import Future, ThreadPoolExecutor
 from contextlib import ExitStack
 from types import TracebackType
-from typing import Any, Dict, Mapping, Optional, Sequence, Set, Tuple, Type, cast
+from typing import Any, Optional, cast
 
 import dagster._check as check
 from dagster._core.definitions.asset_daemon_cursor import (
@@ -267,7 +268,7 @@ class AutoMaterializeLaunchContext:
 
     def __exit__(
         self,
-        exception_type: Type[BaseException],
+        exception_type: type[BaseException],
         exception_value: Exception,
         traceback: TracebackType,
     ) -> None:
@@ -374,7 +375,7 @@ class AssetDaemon(DagsterDaemon):
                 " migrate` to enable."
             )
 
-        amp_tick_futures: Dict[Optional[str], Future] = {}
+        amp_tick_futures: dict[Optional[str], Future] = {}
         threadpool_executor = None
         with ExitStack() as stack:
             if self._settings.get("use_threads"):
@@ -413,7 +414,7 @@ class AssetDaemon(DagsterDaemon):
         self,
         workspace_process_context: IWorkspaceProcessContext,
         threadpool_executor: Optional[ThreadPoolExecutor],
-        amp_tick_futures: Dict[Optional[str], Future],
+        amp_tick_futures: dict[Optional[str], Future],
         debug_crash_flags: SingleInstigatorDebugCrashFlags,
     ):
         instance: DagsterInstance = workspace_process_context.instance
@@ -427,7 +428,7 @@ class AssetDaemon(DagsterDaemon):
 
         workspace = workspace_process_context.create_request_context()
 
-        sensors_and_repos: Sequence[Tuple[Optional[RemoteSensor], Optional[RemoteRepository]]] = []
+        sensors_and_repos: Sequence[tuple[Optional[RemoteSensor], Optional[RemoteRepository]]] = []
 
         if use_auto_materialize_sensors:
             workspace_snapshot = {
@@ -563,7 +564,7 @@ class AssetDaemon(DagsterDaemon):
     def _create_initial_sensor_cursors_from_raw_cursor(
         self,
         instance: DagsterInstance,
-        sensors_and_repos: Sequence[Tuple[RemoteSensor, RemoteRepository]],
+        sensors_and_repos: Sequence[tuple[RemoteSensor, RemoteRepository]],
         all_sensor_states: Mapping[str, InstigatorState],
         pre_sensor_cursor: AssetDaemonCursor,
     ) -> Mapping[str, InstigatorState]:
@@ -865,9 +866,9 @@ class AssetDaemon(DagsterDaemon):
         sensor: Optional[RemoteSensor],
         workspace_process_context: IWorkspaceProcessContext,
         asset_graph: RemoteAssetGraph,
-        auto_materialize_entity_keys: Set[EntityKey],
+        auto_materialize_entity_keys: set[EntityKey],
         stored_cursor: AssetDaemonCursor,
-        auto_observe_asset_keys: Set[AssetKey],
+        auto_observe_asset_keys: set[AssetKey],
         debug_crash_flags: SingleInstigatorDebugCrashFlags,
         is_retry: bool,
         instigator_state: Optional[InstigatorState],

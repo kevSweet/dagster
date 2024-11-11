@@ -1,4 +1,5 @@
-from typing import Any, Iterator, Mapping, Optional, Sequence
+from collections.abc import Iterator, Mapping, Sequence
+from typing import Any, Optional
 
 from dagster import AssetMaterialization, MetadataValue
 from dagster._core.definitions.metadata.table import TableColumn, TableSchema

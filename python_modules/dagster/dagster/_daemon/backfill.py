@@ -1,8 +1,9 @@
 import logging
 import os
 import sys
+from collections.abc import Iterable, Mapping, Sequence
 from contextlib import contextmanager
-from typing import Iterable, Mapping, Optional, Sequence, cast
+from typing import Optional, cast
 
 import dagster._check as check
 from dagster._core.definitions.instigation_logger import InstigationLogger

@@ -1,6 +1,7 @@
 import contextlib
+from collections.abc import Iterable
 from pathlib import Path
-from typing import AbstractSet, Callable, Iterable
+from typing import AbstractSet, Callable
 
 import pytest
 from dagster import DagsterInstance

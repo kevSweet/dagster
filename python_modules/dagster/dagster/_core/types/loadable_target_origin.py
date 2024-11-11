@@ -1,6 +1,7 @@
+from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
 from contextvars import ContextVar
-from typing import Iterator, NamedTuple, Optional, Sequence
+from typing import NamedTuple, Optional
 
 import dagster._check as check
 from dagster._core.errors import DagsterInvariantViolationError
@@ -30,7 +31,7 @@ class LoadableTargetOrigin(
         attribute: Optional[str] = None,
         package_name: Optional[str] = None,
     ):
-        return super(LoadableTargetOrigin, cls).__new__(
+        return super().__new__(
             cls,
             executable_path=check.opt_str_param(executable_path, "executable_path"),
             python_file=check.opt_str_param(python_file, "python_file"),

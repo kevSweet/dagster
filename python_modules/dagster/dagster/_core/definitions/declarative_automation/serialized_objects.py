@@ -1,19 +1,6 @@
+from collections.abc import Iterator, Mapping, Sequence
 from dataclasses import dataclass
-from typing import (
-    TYPE_CHECKING,
-    AbstractSet,
-    FrozenSet,
-    Generic,
-    Iterator,
-    Mapping,
-    NamedTuple,
-    Optional,
-    Sequence,
-    Tuple,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import TYPE_CHECKING, AbstractSet, Generic, NamedTuple, Optional, TypeVar, Union
 
 from dagster._core.asset_graph_view.asset_graph_view import TemporalContext
 from dagster._core.asset_graph_view.serializable_entity_subset import SerializableEntitySubset
@@ -83,7 +70,7 @@ class AssetSubsetWithMetadata(NamedTuple):
     metadata: MetadataMapping
 
     @property
-    def frozen_metadata(self) -> FrozenSet[Tuple[str, MetadataValue]]:
+    def frozen_metadata(self) -> frozenset[tuple[str, MetadataValue]]:
         return frozenset(self.metadata.items())
 
 
@@ -136,7 +123,7 @@ class AutomationConditionEvaluationWithRunIds(Generic[T_EntityKey]):
     """
 
     evaluation: AutomationConditionEvaluation[T_EntityKey]
-    run_ids: FrozenSet[str]
+    run_ids: frozenset[str]
 
     @property
     def key(self) -> T_EntityKey:
@@ -158,7 +145,7 @@ class AutomationConditionNodeCursor(Generic[T_EntityKey]):
     extra_state: Optional[StructuredCursor]
 
     def get_structured_cursor(
-        self, as_type: Type[T_StructuredCursor]
+        self, as_type: type[T_StructuredCursor]
     ) -> Optional[T_StructuredCursor]:
         """Returns the extra_state value if it is of the expected type. Otherwise, returns None."""
         if isinstance(self.extra_state, as_type):

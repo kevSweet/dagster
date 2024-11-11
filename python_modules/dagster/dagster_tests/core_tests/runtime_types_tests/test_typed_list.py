@@ -1,4 +1,3 @@
-import typing
 
 import pytest
 from dagster import DagsterTypeCheckDidNotPass, In, Out, op
@@ -42,7 +41,7 @@ def test_basic_list_input_fail():
 
 
 def test_typing_list_output_pass():
-    @op(out=Out(typing.List))
+    @op(out=Out(list))
     def emit_list():
         return [1]
 
@@ -50,7 +49,7 @@ def test_typing_list_output_pass():
 
 
 def test_typing_list_output_fail():
-    @op(out=Out(typing.List))
+    @op(out=Out(list))
     def emit_list():
         return "foo"
 
@@ -59,7 +58,7 @@ def test_typing_list_output_fail():
 
 
 def test_typing_list_input_pass():
-    @op(ins={"alist": In(typing.List)})
+    @op(ins={"alist": In(list)})
     def ingest_list(alist):
         return alist
 
@@ -69,7 +68,7 @@ def test_typing_list_input_pass():
 
 
 def test_typing_list_input_fail():
-    @op(ins={"alist": In(typing.List)})
+    @op(ins={"alist": In(list)})
     def ingest_list(alist):
         return alist
 
@@ -78,7 +77,7 @@ def test_typing_list_input_fail():
 
 
 def test_typing_list_of_int_output_pass():
-    @op(out=Out(typing.List[int]))
+    @op(out=Out(list[int]))
     def emit_list():
         return [1]
 
@@ -86,7 +85,7 @@ def test_typing_list_of_int_output_pass():
 
 
 def test_typing_list_of_int_output_fail():
-    @op(out=Out(typing.List[int]))
+    @op(out=Out(list[int]))
     def emit_list():
         return ["foo"]
 
@@ -95,7 +94,7 @@ def test_typing_list_of_int_output_fail():
 
 
 def test_typing_list_of_int_input_pass():
-    @op(ins={"alist": In(typing.List[int])})
+    @op(ins={"alist": In(list[int])})
     def ingest_list(alist):
         return alist
 
@@ -105,7 +104,7 @@ def test_typing_list_of_int_input_pass():
 
 
 def test_typing_list_of_int_input_fail():
-    @op(ins={"alist": In(typing.List[int])})
+    @op(ins={"alist": In(list[int])})
     def ingest_list(alist):
         return alist
 
@@ -113,7 +112,7 @@ def test_typing_list_of_int_input_fail():
         wrap_op_in_graph_and_execute(ingest_list, input_values={"alist": ["foobar"]})
 
 
-LIST_LIST_INT = typing.List[typing.List[int]]
+LIST_LIST_INT = list[list[int]]
 
 
 def test_typing_list_of_list_of_int_output_pass():

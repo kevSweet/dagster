@@ -1,17 +1,7 @@
 import functools
+from collections.abc import Awaitable
 from datetime import datetime, timedelta
-from typing import (
-    TYPE_CHECKING,
-    AbstractSet,
-    Awaitable,
-    Callable,
-    Dict,
-    Literal,
-    NamedTuple,
-    Optional,
-    Type,
-    TypeVar,
-)
+from typing import TYPE_CHECKING, AbstractSet, Callable, Literal, NamedTuple, Optional, TypeVar
 
 from dagster import _check as check
 from dagster._core.asset_graph_view.entity_subset import EntitySubset, _ValidatedEntitySubsetValue
@@ -143,7 +133,7 @@ class AssetGraphView(LoadingContext):
         return self._instance
 
     @property
-    def loaders(self) -> Dict[Type, DataLoader]:
+    def loaders(self) -> dict[type, DataLoader]:
         return self._loaders
 
     @property

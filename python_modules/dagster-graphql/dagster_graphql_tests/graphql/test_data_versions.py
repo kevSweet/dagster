@@ -1,4 +1,5 @@
-from typing import Any, Mapping, Optional, Sequence, Union, cast
+from collections.abc import Mapping, Sequence
+from typing import Any, Optional, Union, cast
 
 from dagster import (
     AssetIn,
@@ -432,6 +433,6 @@ def _get_asset_node(result: Any, key: Optional[str] = None) -> Mapping[str, Any]
             to_check["assetNodeOrError"]
             if "assetNodeOrError" in to_check
             else next(
-                (node for node in to_check["assetNodes"] if node["assetKey"]["path"] == [key])
+                node for node in to_check["assetNodes"] if node["assetKey"]["path"] == [key]
             )
         )

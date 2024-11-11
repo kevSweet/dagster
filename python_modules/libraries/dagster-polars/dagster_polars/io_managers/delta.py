@@ -1,7 +1,8 @@
 from collections import defaultdict
+from collections.abc import Sequence
 from enum import Enum
 from pprint import pformat
-from typing import TYPE_CHECKING, Any, Dict, Optional, Sequence, Tuple, Union
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 import polars as pl
 from dagster import InputContext, MetadataValue, MultiPartitionKey, OutputContext
@@ -318,7 +319,7 @@ class PolarsDeltaIOManager(BasePolarsUPathIOManager):
     @staticmethod
     def get_partition_filters(
         context: Union[InputContext, OutputContext],
-    ) -> Sequence[Tuple[str, str, Any]]:
+    ) -> Sequence[tuple[str, str, Any]]:
         if isinstance(context, OutputContext):
             partition_by = context.definition_metadata.get("partition_by")
         elif isinstance(context, InputContext) and context.upstream_output is not None:
@@ -352,7 +353,7 @@ class PolarsDeltaIOManager(BasePolarsUPathIOManager):
 
     def get_metadata(
         self, context: OutputContext, obj: Union[pl.DataFrame, pl.LazyFrame, None]
-    ) -> Dict[str, MetadataValue]:
+    ) -> dict[str, MetadataValue]:
         context_metadata = context.definition_metadata or {}
 
         metadata = super().get_metadata(context, obj)

@@ -2,23 +2,9 @@ import itertools
 import warnings
 from abc import ABC, abstractmethod
 from collections import defaultdict
+from collections.abc import Iterable, Mapping, Sequence
 from functools import cached_property
-from typing import (
-    TYPE_CHECKING,
-    AbstractSet,
-    Dict,
-    Generic,
-    Iterable,
-    List,
-    Mapping,
-    Optional,
-    Sequence,
-    Set,
-    TypeVar,
-    Union,
-)
-
-from typing_extensions import Annotated
+from typing import TYPE_CHECKING, AbstractSet, Annotated, Generic, Optional, TypeVar, Union
 
 import dagster._check as check
 from dagster._core.definitions.asset_check_spec import AssetCheckKey
@@ -384,11 +370,11 @@ class RemoteWorkspaceAssetNode(RemoteAssetNode):
     def _observable_node_snap(self) -> "AssetNodeSnap":
         try:
             return next(
-                (
+                
                     info.asset_node.asset_node_snap
                     for info in self.repo_scoped_asset_infos
                     if info.asset_node.is_observable
-                )
+                
             )
         except StopIteration:
             check.failed("No observable node found")
@@ -497,17 +483,17 @@ class RemoteRepositoryAssetGraph(RemoteAssetGraph[RemoteRepositoryAssetNode]):
         # First pass, we need to:
 
         # * Build the dependency graph of asset keys.
-        upstream: Dict[AssetKey, Set[AssetKey]] = defaultdict(set)
-        downstream: Dict[AssetKey, Set[AssetKey]] = defaultdict(set)
+        upstream: dict[AssetKey, set[AssetKey]] = defaultdict(set)
+        downstream: dict[AssetKey, set[AssetKey]] = defaultdict(set)
 
         # * Build an index of execution sets by key. An execution set is a set of assets and checks
         # that must be executed together. AssetNodeSnaps and AssetCheckNodeSnaps already have an
         # optional execution_set_identifier set. A null execution_set_identifier indicates that the
         # node or check can be executed independently.
-        execution_sets_by_id: Dict[str, Set[EntityKey]] = defaultdict(set)
+        execution_sets_by_id: dict[str, set[EntityKey]] = defaultdict(set)
 
         # * Map checks to their corresponding asset keys
-        check_keys_by_asset_key: Dict[AssetKey, Set[AssetCheckKey]] = defaultdict(set)
+        check_keys_by_asset_key: dict[AssetKey, set[AssetCheckKey]] = defaultdict(set)
         for asset_snap in repo.get_asset_node_snaps():
             id = asset_snap.execution_set_identifier
             key = asset_snap.asset_key
@@ -527,8 +513,8 @@ class RemoteRepositoryAssetGraph(RemoteAssetGraph[RemoteRepositoryAssetNode]):
             check_keys_by_asset_key[check_snap.asset_key].add(check_snap.key)
 
         # Second Pass - build the final nodes
-        assets_by_key: Dict[AssetKey, RemoteRepositoryAssetNode] = {}
-        asset_checks_by_key: Dict[AssetCheckKey, RemoteAssetCheckNode] = {}
+        assets_by_key: dict[AssetKey, RemoteRepositoryAssetNode] = {}
+        asset_checks_by_key: dict[AssetCheckKey, RemoteAssetCheckNode] = {}
 
         for asset_snap in repo.get_asset_node_snaps():
             id = asset_snap.execution_set_identifier
@@ -632,8 +618,8 @@ class RemoteWorkspaceAssetGraph(RemoteAssetGraph[RemoteWorkspaceAssetNode]):
             for repo in code_location.get_repositories().values()
         )
 
-        asset_infos_by_key: Dict[AssetKey, List[RepositoryScopedAssetInfo]] = defaultdict(list)
-        asset_checks_by_key: Dict[AssetCheckKey, RemoteAssetCheckNode] = {}
+        asset_infos_by_key: dict[AssetKey, list[RepositoryScopedAssetInfo]] = defaultdict(list)
+        asset_checks_by_key: dict[AssetCheckKey, RemoteAssetCheckNode] = {}
         for repo in repos:
             for key, asset_node in repo.asset_graph.remote_asset_nodes_by_key.items():
                 asset_infos_by_key[key].append(

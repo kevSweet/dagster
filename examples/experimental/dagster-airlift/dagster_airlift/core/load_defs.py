@@ -1,5 +1,6 @@
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
-from typing import Callable, Iterable, Iterator, Optional, Union
+from typing import Callable, Optional, Union
 
 from dagster import (
     AssetsDefinition,

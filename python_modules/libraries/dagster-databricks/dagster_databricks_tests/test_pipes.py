@@ -1,14 +1,15 @@
 import os
 import re
+from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager
-from typing import Any, Dict, Iterator, Optional
+from typing import Any, Optional
 
 import dagster._check as check
 import pytest
 from dagster import AssetExecutionContext, asset, materialize
 from dagster._core.errors import DagsterPipesExecutionError
 from dagster_databricks._test_utils import (
-    databricks_client,  # noqa: F401
+    databricks_client,
     temp_dbfs_script,
     upload_dagster_pipes_whl,
 )
@@ -90,7 +91,7 @@ def make_submit_task_dict(
     dagster_pipes_whl_path: str,
     forward_logs: bool,
     cluster_id: Optional[str] = None,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     submit_spec = {
         "libraries": [
             {"whl": dagster_pipes_whl_path},

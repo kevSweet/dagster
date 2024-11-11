@@ -1,17 +1,6 @@
+from collections.abc import Iterator, Mapping
 from functools import update_wrapper
-from typing import (
-    TYPE_CHECKING,
-    AbstractSet,
-    Any,
-    Callable,
-    Dict,
-    Iterator,
-    Mapping,
-    Optional,
-    Union,
-    cast,
-    overload,
-)
+from typing import TYPE_CHECKING, AbstractSet, Any, Callable, Optional, Union, cast, overload
 
 from typing_extensions import TypeAlias
 
@@ -407,7 +396,7 @@ def resource(
 
     def _wrap(resource_fn: ResourceFunction) -> "ResourceDefinition":
         return _ResourceDecoratorCallable(
-            config_schema=cast(Optional[Dict[str, Any]], config_schema),
+            config_schema=cast(Optional[dict[str, Any]], config_schema),
             description=description,
             required_resource_keys=required_resource_keys,
             version=version,

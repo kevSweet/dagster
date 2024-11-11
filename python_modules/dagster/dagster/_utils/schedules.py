@@ -3,7 +3,8 @@ import datetime
 import functools
 import math
 import re
-from typing import Iterator, Optional, Sequence, Union
+from collections.abc import Iterator, Sequence
+from typing import Optional, Union
 
 from croniter import croniter as _croniter
 

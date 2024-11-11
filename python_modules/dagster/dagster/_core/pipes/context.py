@@ -1,21 +1,11 @@
 import os
+from collections.abc import Iterator, Mapping, Sequence
 from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime
 from functools import cached_property
 from queue import Queue
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Dict,
-    Iterator,
-    Mapping,
-    Optional,
-    Sequence,
-    TypedDict,
-    Union,
-    cast,
-)
+from typing import TYPE_CHECKING, Any, Optional, TypedDict, Union, cast
 
 from dagster_pipes import (
     DAGSTER_PIPES_CONTEXT_ENV_VAR,
@@ -313,7 +303,7 @@ class PipesSession:
     created_at: datetime = field(default_factory=datetime.now)
 
     @cached_property
-    def default_remote_invocation_info(self) -> Dict[str, str]:
+    def default_remote_invocation_info(self) -> dict[str, str]:
         """Key-value pairs encoding metadata about the launching Dagster process, typically attached to the remote
         environment.
 

@@ -1,4 +1,3 @@
-from typing import List
 
 from dagster import AssetSpec
 from dagster._core.definitions.definitions_class import Definitions
@@ -23,8 +22,8 @@ airflow_instance = AirflowInstance(
 
 
 def build_asset_specs_for_task(
-    task_name: str, prev_asset_specs: List[AssetSpec]
-) -> List[AssetSpec]:
+    task_name: str, prev_asset_specs: list[AssetSpec]
+) -> list[AssetSpec]:
     return [
         # Create a bunch of dependencies for each asset.
         AssetSpec(f"{task_name}_asset_{i}", deps=[spec.key for spec in prev_asset_specs])

@@ -1,4 +1,5 @@
-from typing import ContextManager, Optional, Sequence
+from collections.abc import Sequence
+from typing import ContextManager, Optional
 
 import dagster._check as check
 import sqlalchemy as db

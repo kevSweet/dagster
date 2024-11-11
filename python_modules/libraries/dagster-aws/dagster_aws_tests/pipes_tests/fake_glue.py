@@ -4,7 +4,7 @@ import time
 import warnings
 from dataclasses import dataclass
 from subprocess import PIPE, Popen
-from typing import Dict, List, Literal, Optional
+from typing import Literal, Optional
 
 import boto3
 
@@ -44,7 +44,7 @@ class LocalGlueMockClient:
 
         self.process = None  # jobs will be executed in a separate process
 
-        self._job_runs: Dict[str, SimulatedJobRun] = {}  # mapping of JobRunId to SimulatedJobRun
+        self._job_runs: dict[str, SimulatedJobRun] = {}  # mapping of JobRunId to SimulatedJobRun
 
     def get_job_run(self, JobName: str, RunId: str):
         # get original response
@@ -76,7 +76,7 @@ class LocalGlueMockClient:
 
         return response
 
-    def start_job_run(self, JobName: str, Arguments: Optional[Dict[str, str]], **kwargs):
+    def start_job_run(self, JobName: str, Arguments: Optional[dict[str, str]], **kwargs):
         params = {
             "JobName": JobName,
         }
@@ -129,7 +129,7 @@ class LocalGlueMockClient:
 
         return response
 
-    def batch_stop_job_run(self, JobName: str, JobRunIds: List[str]):
+    def batch_stop_job_run(self, JobName: str, JobRunIds: list[str]):
         for job_run_id in JobRunIds:
             if simulated_job_run := self._job_runs.get(job_run_id):
                 simulated_job_run.popen.terminate()

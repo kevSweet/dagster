@@ -1,7 +1,8 @@
 import os
 import pickle
 import uuid
-from typing import TYPE_CHECKING, AbstractSet, Any, Mapping, Optional, cast
+from collections.abc import Mapping
+from typing import TYPE_CHECKING, AbstractSet, Any, Optional, cast
 
 from dagster import (
     AssetMaterialization,
@@ -62,9 +63,7 @@ class DagstermillResourceEventGenerationManager(EventGenerationManager):
     def teardown(self):
         return [
             teardown_event
-            for teardown_event in super(
-                DagstermillResourceEventGenerationManager, self
-            ).generate_teardown_events()
+            for teardown_event in super().generate_teardown_events()
         ]
 
 

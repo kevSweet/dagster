@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, AbstractSet, Any, Callable, Iterator, Optional
+from collections.abc import Iterator
+from typing import TYPE_CHECKING, AbstractSet, Any, Callable, Optional
 
 from typing_extensions import TypeAlias
 

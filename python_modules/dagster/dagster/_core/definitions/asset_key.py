@@ -1,6 +1,7 @@
 import re
+from collections.abc import Mapping, Sequence
 from functools import cached_property
-from typing import TYPE_CHECKING, Any, List, Mapping, NamedTuple, Optional, Sequence, TypeVar, Union
+from typing import TYPE_CHECKING, Any, NamedTuple, Optional, TypeVar, Union
 
 import dagster._check as check
 import dagster._seven as seven
@@ -255,7 +256,7 @@ def asset_keys_from_defs_and_coercibles(
 ) -> Sequence[AssetKey]:
     from dagster._core.definitions.assets import AssetsDefinition
 
-    result: List[AssetKey] = []
+    result: list[AssetKey] = []
     for el in assets:
         if isinstance(el, AssetsDefinition):
             result.extend(el.keys)

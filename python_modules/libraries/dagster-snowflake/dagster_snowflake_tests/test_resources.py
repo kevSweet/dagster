@@ -1,11 +1,11 @@
 import os
 import uuid
+from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Iterator
 from unittest import mock
 
 import pytest
-import sqlalchemy  # noqa: F401
+import sqlalchemy
 from dagster import (
     DagsterInstance,
     DagsterResourceFunctionError,

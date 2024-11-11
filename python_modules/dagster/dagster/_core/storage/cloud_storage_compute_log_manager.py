@@ -4,8 +4,9 @@ import threading
 import time
 from abc import abstractmethod
 from collections import defaultdict
+from collections.abc import Iterator, Sequence
 from contextlib import contextmanager
-from typing import IO, Iterator, Optional, Sequence
+from typing import IO, Optional
 
 from dagster._core.instance import T_DagsterInstance
 from dagster._core.storage.compute_log_manager import (

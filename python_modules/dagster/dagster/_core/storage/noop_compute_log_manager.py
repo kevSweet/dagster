@@ -1,5 +1,6 @@
+from collections.abc import Generator, Mapping, Sequence
 from contextlib import contextmanager
-from typing import IO, Any, Generator, Mapping, Optional, Sequence
+from typing import IO, Any, Optional
 
 from typing_extensions import Self
 

@@ -1,21 +1,8 @@
 import os
 import sys
+from collections.abc import Iterable, Iterator, Mapping, Sequence
 from contextlib import contextmanager
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Iterable,
-    Iterator,
-    List,
-    Mapping,
-    Optional,
-    Sequence,
-    Tuple,
-    TypeVar,
-    Union,
-    cast,
-)
+from typing import TYPE_CHECKING, Any, Callable, Optional, TypeVar, Union, cast
 
 import click
 import tomli
@@ -61,7 +48,7 @@ WORKSPACE_TARGET_WARNING = (
 
 T_Callable = TypeVar("T_Callable", bound=Callable[..., Any])
 
-ClickArgValue: TypeAlias = Union[str, Tuple[str]]
+ClickArgValue: TypeAlias = Union[str, tuple[str]]
 ClickArgMapping: TypeAlias = Mapping[str, ClickArgValue]
 ClickOption: TypeAlias = Callable[[T_Callable], T_Callable]
 
@@ -137,7 +124,7 @@ def get_workspace_load_target(kwargs: ClickArgMapping) -> WorkspaceLoadTarget:
             "grpc_port",
             "grpc_socket",
         )
-        return WorkspaceFileTarget(paths=list(cast(Union[List, Tuple], kwargs.get("workspace"))))
+        return WorkspaceFileTarget(paths=list(cast(Union[list, tuple], kwargs.get("workspace"))))
     if kwargs.get("python_file"):
         _check_cli_arguments_none(
             kwargs,

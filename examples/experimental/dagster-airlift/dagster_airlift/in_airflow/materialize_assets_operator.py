@@ -1,4 +1,5 @@
-from typing import Any, Iterable, Mapping, Sequence, Union
+from collections.abc import Iterable, Mapping, Sequence
+from typing import Any, Union
 
 from airflow.utils.context import Context
 

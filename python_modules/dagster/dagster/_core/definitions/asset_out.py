@@ -1,4 +1,5 @@
-from typing import Any, Mapping, NamedTuple, Optional, Sequence, Type, Union
+from collections.abc import Mapping, Sequence
+from typing import Any, NamedTuple, Optional, Union
 
 import dagster._check as check
 from dagster._annotations import (
@@ -50,7 +51,7 @@ class AssetOut(
             ("io_manager_key", PublicAttr[str]),
             ("description", PublicAttr[Optional[str]]),
             ("is_required", PublicAttr[bool]),
-            ("dagster_type", PublicAttr[Union[DagsterType, Type[NoValueSentinel]]]),
+            ("dagster_type", PublicAttr[Union[DagsterType, type[NoValueSentinel]]]),
             ("group_name", PublicAttr[Optional[str]]),
             ("code_version", PublicAttr[Optional[str]]),
             ("freshness_policy", PublicAttr[Optional[FreshnessPolicy]]),
@@ -100,7 +101,7 @@ class AssetOut(
         cls,
         key_prefix: Optional[CoercibleToAssetKeyPrefix] = None,
         key: Optional[CoercibleToAssetKey] = None,
-        dagster_type: Union[Type, DagsterType] = NoValueSentinel,
+        dagster_type: Union[type, DagsterType] = NoValueSentinel,
         description: Optional[str] = None,
         is_required: bool = True,
         io_manager_key: Optional[str] = None,
@@ -117,7 +118,7 @@ class AssetOut(
         if isinstance(key_prefix, str):
             key_prefix = [key_prefix]
 
-        return super(AssetOut, cls).__new__(
+        return super().__new__(
             cls,
             key=AssetKey.from_coercible(key) if key is not None else None,
             key_prefix=check.opt_list_param(key_prefix, "key_prefix", of_type=str),

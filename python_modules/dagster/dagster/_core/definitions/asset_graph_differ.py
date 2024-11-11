@@ -1,17 +1,6 @@
+from collections.abc import Mapping, Sequence
 from enum import Enum
-from typing import (
-    AbstractSet,
-    Any,
-    Callable,
-    Generic,
-    Mapping,
-    NamedTuple,
-    Optional,
-    Sequence,
-    Set,
-    TypeVar,
-    Union,
-)
+from typing import AbstractSet, Any, Callable, Generic, NamedTuple, Optional, TypeVar, Union
 
 import dagster._check as check
 from dagster._core.definitions.events import AssetKey
@@ -189,7 +178,7 @@ class AssetGraphDiffer:
         branch_asset = self.branch_asset_graph.get(asset_key)
         base_asset = self.base_asset_graph.get(asset_key)
 
-        change_types: Set[AssetDefinitionChangeType] = set()
+        change_types: set[AssetDefinitionChangeType] = set()
         code_version_diff: Optional[ValueDiff] = None
         dependencies_diff: Optional[DictDiff] = None
         partitions_definition_diff: Optional[ValueDiff] = None

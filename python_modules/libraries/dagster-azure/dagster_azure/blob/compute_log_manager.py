@@ -1,7 +1,8 @@
 import os
+from collections.abc import Mapping, Sequence
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
-from typing import Any, Mapping, Optional, Sequence
+from typing import Any, Optional
 
 import dagster._seven as seven
 from azure.identity import DefaultAzureCredential

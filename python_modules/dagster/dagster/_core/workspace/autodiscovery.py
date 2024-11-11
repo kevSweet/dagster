@@ -1,6 +1,7 @@
 import inspect
+from collections.abc import Sequence
 from types import ModuleType
-from typing import Callable, NamedTuple, Optional, Sequence, Tuple, Type, Union
+from typing import Callable, NamedTuple, Optional, Union
 
 from dagster import DagsterInvariantViolationError, GraphDefinition, RepositoryDefinition
 from dagster._core.code_pointer import load_python_file, load_python_module
@@ -83,12 +84,12 @@ def loadable_targets_from_loaded_module(module: ModuleType) -> Sequence[Loadable
     elif len(loadable_jobs) > 1:
         target_type = "job" if len(loadable_jobs) > 1 else "pipeline"
         raise DagsterInvariantViolationError(
-            (
+            
                 f'No repository and more than one {target_type} found in "{module.__name__}". If you'
                 f" load a file or module directly it must have only one {target_type} in scope."
                 f" Found {target_type}s defined in variables or decorated functions:"
                 f" {[p.attribute for p in loadable_jobs]!r}."
-            )
+            
         )
 
     loadable_graphs = _loadable_targets_of_type(module, GraphDefinition)
@@ -98,12 +99,12 @@ def loadable_targets_from_loaded_module(module: ModuleType) -> Sequence[Loadable
 
     elif len(loadable_graphs) > 1:
         raise DagsterInvariantViolationError(
-            (
+            
                 f'More than one graph found in "{module.__name__}". '
                 "If you load a file or module directly and it has no repositories, jobs, or "
                 "pipelines in scope, it must have no more than one graph in scope. "
                 f"Found graphs defined in variables or decorated functions: {[g.attribute for g in loadable_graphs]!r}."
-            )
+            
         )
 
     module_assets, module_source_assets, _ = assets_from_modules([module])
@@ -117,7 +118,7 @@ def loadable_targets_from_loaded_module(module: ModuleType) -> Sequence[Loadable
 
 
 def _loadable_targets_of_type(
-    module: ModuleType, klass: Union[Type, Tuple[Type, ...]]
+    module: ModuleType, klass: Union[type, tuple[type, ...]]
 ) -> Sequence[LoadableTarget]:
     loadable_targets = []
     for name, value in inspect.getmembers(module):

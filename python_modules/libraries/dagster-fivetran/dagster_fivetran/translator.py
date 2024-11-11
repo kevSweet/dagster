@@ -1,5 +1,6 @@
+from collections.abc import Mapping, Sequence
 from enum import Enum
-from typing import Any, Mapping, NamedTuple, Optional, Sequence
+from typing import Any, NamedTuple, Optional
 
 from dagster._core.definitions.asset_key import AssetKey
 from dagster._core.definitions.asset_spec import AssetSpec

@@ -2,8 +2,9 @@ import logging
 import os
 import time
 from abc import ABC, abstractmethod
+from collections.abc import Iterable, Mapping, Sequence
 from datetime import datetime
-from typing import Any, Dict, Iterable, Mapping, Sequence, Tuple
+from typing import Any
 
 import requests
 from airflow.models.operator import BaseOperator
@@ -22,7 +23,7 @@ from .partition_utils import (
 logger = logging.getLogger(__name__)
 
 # A job in dagster is uniquely defined by (location_name, repository_name, job_name).
-DagsterJobIdentifier = Tuple[str, str, str]
+DagsterJobIdentifier = tuple[str, str, str]
 IMPLICIT_ASSET_JOB_PREFIX = "__ASSET_JOB"
 
 DEFAULT_DAGSTER_RUN_STATUS_POLL_INTERVAL = 1
@@ -164,7 +165,7 @@ class BaseDagsterAssetsOperator(BaseOperator, ABC):
     def get_airflow_logical_date(self, context: Context) -> datetime:
         return self.get_attribute_from_airflow_context(context, "logical_date")
 
-    def default_dagster_run_tags(self, context: Context) -> Dict[str, str]:
+    def default_dagster_run_tags(self, context: Context) -> dict[str, str]:
         return {
             DAG_ID_TAG_KEY: self.get_airflow_dag_id(context),
             DAG_RUN_ID_TAG_KEY: self.get_airflow_dag_run_id(context),
@@ -260,7 +261,7 @@ def _build_dagster_run_execution_params(
     tags: Mapping[str, Any],
     job_identifier: DagsterJobIdentifier,
     asset_key_paths: Sequence[Sequence[str]],
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     location_name, repository_name, job_name = job_identifier
     return {
         "mode": "default",

@@ -1,4 +1,5 @@
-from typing import AbstractSet, Any, Callable, Iterable, Mapping, Optional, Sequence, Set, Union
+from collections.abc import Iterable, Mapping, Sequence
+from typing import AbstractSet, Any, Callable, Optional, Union
 
 from typing_extensions import TypeAlias
 
@@ -102,7 +103,7 @@ def asset_check(
     blocking: bool = False,
     additional_ins: Optional[Mapping[str, AssetIn]] = None,
     additional_deps: Optional[Iterable[CoercibleToAssetDep]] = None,
-    required_resource_keys: Optional[Set[str]] = None,
+    required_resource_keys: Optional[set[str]] = None,
     resource_defs: Optional[Mapping[str, object]] = None,
     config_schema: Optional[UserConfigSchema] = None,
     compute_kind: Optional[str] = None,
@@ -280,7 +281,7 @@ def multi_asset_check(
     compute_kind: Optional[str] = None,
     op_tags: Optional[Mapping[str, Any]] = None,
     resource_defs: Optional[Mapping[str, object]] = None,
-    required_resource_keys: Optional[Set[str]] = None,
+    required_resource_keys: Optional[set[str]] = None,
     retry_policy: Optional[RetryPolicy] = None,
     config_schema: Optional[UserConfigSchema] = None,
 ) -> Callable[[Callable[..., Any]], AssetChecksDefinition]:

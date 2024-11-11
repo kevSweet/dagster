@@ -1,7 +1,8 @@
 import os
 from abc import ABC, abstractmethod
+from collections.abc import Mapping, Sequence
 from datetime import datetime
-from typing import Any, Callable, Generic, Mapping, NamedTuple, Optional, Sequence, Union
+from typing import Any, Callable, Generic, NamedTuple, Optional, Union
 
 from typing_extensions import Self, TypeVar
 
@@ -531,7 +532,7 @@ class TextMetadataValue(
     """
 
     def __new__(cls, text: Optional[str]):
-        return super(TextMetadataValue, cls).__new__(
+        return super().__new__(
             cls, check.opt_str_param(text, "text", default="")
         )
 
@@ -559,7 +560,7 @@ class UrlMetadataValue(
     """
 
     def __new__(cls, url: Optional[str]):
-        return super(UrlMetadataValue, cls).__new__(
+        return super().__new__(
             cls, check.opt_str_param(url, "url", default="")
         )
 
@@ -581,7 +582,7 @@ class PathMetadataValue(
     """
 
     def __new__(cls, path: Optional[Union[str, os.PathLike]]):
-        return super(PathMetadataValue, cls).__new__(
+        return super().__new__(
             cls, check.opt_path_param(path, "path", default="")
         )
 
@@ -603,7 +604,7 @@ class NotebookMetadataValue(
     """
 
     def __new__(cls, path: Optional[Union[str, os.PathLike]]):
-        return super(NotebookMetadataValue, cls).__new__(
+        return super().__new__(
             cls, check.opt_path_param(path, "path", default="")
         )
 
@@ -661,7 +662,7 @@ class JsonMetadataValue(
             seven.dumps(data)
         except TypeError:
             raise DagsterInvalidMetadata("Value is not JSON serializable.")
-        return super(JsonMetadataValue, cls).__new__(cls, data)
+        return super().__new__(cls, data)
 
     @public
     @property
@@ -687,7 +688,7 @@ class MarkdownMetadataValue(
     """
 
     def __new__(cls, md_str: Optional[str]):
-        return super(MarkdownMetadataValue, cls).__new__(
+        return super().__new__(
             cls, check.opt_str_param(md_str, "md_str", default="")
         )
 
@@ -718,7 +719,7 @@ class PythonArtifactMetadataValue(
     """
 
     def __new__(cls, module: str, name: str):
-        return super(PythonArtifactMetadataValue, cls).__new__(
+        return super().__new__(
             cls, check.str_param(module, "module"), check.str_param(name, "name")
         )
 
@@ -746,7 +747,7 @@ class FloatMetadataValue(
     """
 
     def __new__(cls, value: Optional[float]):
-        return super(FloatMetadataValue, cls).__new__(cls, check.opt_float_param(value, "value"))
+        return super().__new__(cls, check.opt_float_param(value, "value"))
 
 
 @whitelist_for_serdes(storage_name="IntMetadataEntryData")
@@ -766,7 +767,7 @@ class IntMetadataValue(
     """
 
     def __new__(cls, value: Optional[int]):
-        return super(IntMetadataValue, cls).__new__(cls, check.opt_int_param(value, "value"))
+        return super().__new__(cls, check.opt_int_param(value, "value"))
 
 
 @whitelist_for_serdes(storage_name="BoolMetadataEntryData")
@@ -781,7 +782,7 @@ class BoolMetadataValue(
     """
 
     def __new__(cls, value: Optional[bool]):
-        return super(BoolMetadataValue, cls).__new__(cls, check.opt_bool_param(value, "value"))
+        return super().__new__(cls, check.opt_bool_param(value, "value"))
 
 
 @whitelist_for_serdes
@@ -799,7 +800,7 @@ class TimestampMetadataValue(
     """
 
     def __new__(cls, value: float):
-        return super(TimestampMetadataValue, cls).__new__(cls, check.float_param(value, "value"))
+        return super().__new__(cls, check.float_param(value, "value"))
 
 
 @whitelist_for_serdes(storage_name="DagsterPipelineRunMetadataEntryData")
@@ -819,7 +820,7 @@ class DagsterRunMetadataValue(
     """
 
     def __new__(cls, run_id: str):
-        return super(DagsterRunMetadataValue, cls).__new__(cls, check.str_param(run_id, "run_id"))
+        return super().__new__(cls, check.str_param(run_id, "run_id"))
 
     @public
     @property
@@ -855,7 +856,7 @@ class DagsterJobMetadataValue(
         location_name: str,
         repository_name: Optional[str] = None,
     ):
-        return super(DagsterJobMetadataValue, cls).__new__(
+        return super().__new__(
             cls,
             check.str_param(job_name, "job_name"),
             check.str_param(location_name, "location_name"),
@@ -882,7 +883,7 @@ class DagsterAssetMetadataValue(
     def __new__(cls, asset_key: AssetKey):
         from dagster._core.definitions.events import AssetKey
 
-        return super(DagsterAssetMetadataValue, cls).__new__(
+        return super().__new__(
             cls, check.inst_param(asset_key, "asset_key", AssetKey)
         )
 
@@ -958,7 +959,7 @@ class TableMetadataValue(
                 ]
             )
 
-        return super(TableMetadataValue, cls).__new__(
+        return super().__new__(
             cls,
             records,
             schema,
@@ -983,7 +984,7 @@ class TableSchemaMetadataValue(
     """
 
     def __new__(cls, schema: TableSchema):
-        return super(TableSchemaMetadataValue, cls).__new__(
+        return super().__new__(
             cls, check.inst_param(schema, "schema", TableSchema)
         )
 
@@ -1009,7 +1010,7 @@ class TableColumnLineageMetadataValue(
     """
 
     def __new__(cls, column_lineage: TableColumnLineage):
-        return super(TableColumnLineageMetadataValue, cls).__new__(
+        return super().__new__(
             cls, check.inst_param(column_lineage, "column_lineage", TableColumnLineage)
         )
 
@@ -1045,7 +1046,7 @@ class CodeLocationReconstructionMetadataValue(
     """
 
     def __new__(cls, data: str):
-        return super(CodeLocationReconstructionMetadataValue, cls).__new__(
+        return super().__new__(
             cls, check.str_param(data, "data")
         )
 

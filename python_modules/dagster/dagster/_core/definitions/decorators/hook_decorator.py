@@ -1,15 +1,6 @@
+from collections.abc import Sequence
 from functools import update_wrapper
-from typing import (
-    TYPE_CHECKING,
-    AbstractSet,
-    Any,
-    Callable,
-    Optional,
-    Sequence,
-    Union,
-    cast,
-    overload,
-)
+from typing import TYPE_CHECKING, AbstractSet, Any, Callable, Optional, Union, cast, overload
 
 import dagster._check as check
 from dagster._core.decorator_utils import get_function_params, validate_expected_params

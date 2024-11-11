@@ -3,8 +3,9 @@ import os
 import random
 import time
 from collections import defaultdict
+from collections.abc import Mapping
 from contextlib import contextmanager
-from typing import Any, Callable, Mapping, Optional, Union
+from typing import Any, Callable, Optional, Union
 
 import boto3
 from dagster import (
@@ -506,7 +507,7 @@ def hard_failer_graph():
 @op
 def check_volume_mount(context):
     with open(
-        "/opt/dagster/test_mount_path/volume_mounted_file.yaml", "r", encoding="utf8"
+        "/opt/dagster/test_mount_path/volume_mounted_file.yaml", encoding="utf8"
     ) as mounted_file:
         contents = mounted_file.read()
         context.log.info(f"Contents of mounted file: {contents}")

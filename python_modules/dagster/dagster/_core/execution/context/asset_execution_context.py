@@ -1,4 +1,5 @@
-from typing import AbstractSet, Any, Iterator, Mapping, Optional, Sequence
+from collections.abc import Iterator, Mapping, Sequence
+from typing import AbstractSet, Any, Optional
 
 import dagster._check as check
 from dagster._annotations import deprecated, experimental, public

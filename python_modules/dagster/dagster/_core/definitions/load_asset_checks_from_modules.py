@@ -1,7 +1,8 @@
 import inspect
+from collections.abc import Iterable, Sequence
 from importlib import import_module
 from types import ModuleType
-from typing import Iterable, Optional, Sequence, Set, cast
+from typing import Optional, cast
 
 import dagster._check as check
 from dagster._core.definitions.asset_checks import AssetChecksDefinition, has_only_asset_checks
@@ -19,7 +20,7 @@ from dagster._core.definitions.load_assets_from_modules import (
 
 def _checks_from_modules(modules: Iterable[ModuleType]) -> Sequence[AssetChecksDefinition]:
     checks = []
-    ids: Set[int] = set()
+    ids: set[int] = set()
     for module in modules:
         for c in find_objects_in_module_of_types(module, AssetsDefinition):
             if has_only_asset_checks(c) and id(c) not in ids:

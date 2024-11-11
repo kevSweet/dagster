@@ -7,27 +7,14 @@ import time
 import unittest.mock
 import warnings
 from collections import defaultdict
+from collections.abc import Iterator, Mapping, Sequence
 from concurrent.futures import Future, ThreadPoolExecutor
 from contextlib import contextmanager
 from functools import update_wrapper
 from pathlib import Path
 from signal import Signals
 from threading import Event
-from typing import (
-    AbstractSet,
-    Any,
-    Callable,
-    Dict,
-    Iterator,
-    Mapping,
-    NamedTuple,
-    NoReturn,
-    Optional,
-    Sequence,
-    TypeVar,
-    Union,
-    cast,
-)
+from typing import AbstractSet, Any, Callable, NamedTuple, NoReturn, Optional, TypeVar, Union, cast
 
 from typing_extensions import Self
 
@@ -456,11 +443,11 @@ class MockedRunCoordinator(RunCoordinator, ConfigurableClass):
 
 
 class TestSecretsLoader(SecretsLoader, ConfigurableClass):
-    def __init__(self, inst_data: Optional[ConfigurableClassData], env_vars: Dict[str, str]):
+    def __init__(self, inst_data: Optional[ConfigurableClassData], env_vars: dict[str, str]):
         self._inst_data = inst_data
         self.env_vars = env_vars
 
-    def get_secrets_for_environment(self, location_name: str) -> Dict[str, str]:
+    def get_secrets_for_environment(self, location_name: str) -> dict[str, str]:
         return self.env_vars.copy()
 
     @property
@@ -631,7 +618,7 @@ def test_counter():
     assert counts["bar"] == 10
 
 
-def wait_for_futures(futures: Dict[str, Future], timeout: Optional[float] = None):
+def wait_for_futures(futures: dict[str, Future], timeout: Optional[float] = None):
     start_time = time.time()
     results = {}
     for target_id, future in futures.copy().items():
