@@ -336,57 +336,53 @@ LAUNCH_MULTIPLE_RUNS_MUTATION = (
 mutation($executionParamsList: [ExecutionParams!]!) {
   launchMultipleRuns(executionParamsList: $executionParamsList) {
     __typename
-    ... on LaunchMultipleRunsResult {
-      launchMultipleRunsResult {
-        ... on LaunchRunResult {
-          __typename
-          ... on InvalidStepError {
-            invalidStepKey
+    launchMultipleRunsResult {
+      __typename
+      ... on InvalidStepError {
+        invalidStepKey
+      }
+      ... on InvalidOutputError {
+        stepKey
+        invalidOutputName
+      }
+      ... on LaunchRunSuccess {
+        run {
+          runId
+          pipeline {
+            name
           }
-          ... on InvalidOutputError {
-            stepKey
-            invalidOutputName
+          tags {
+            key
+            value
           }
-          ... on LaunchRunSuccess {
-            run {
-              runId
-              pipeline {
-                name
-              }
-              tags {
-                key
-                value
-              }
-              status
-              runConfigYaml
-              mode
-              resolvedOpSelection
-            }
-          }
-          ... on ConflictingExecutionParamsError {
-            message
-          }
-          ... on PresetNotFoundError {
-            preset
-            message
-          }
-          ... on RunConfigValidationInvalid {
-            pipelineName
-            errors {
-              __typename
-              message
-              path
-              reason
-            }
-          }
-          ... on PipelineNotFoundError {
-            message
-            pipelineName
-          }
-          ... on PythonError {
-            ...errorFragment
-          }
+          status
+          runConfigYaml
+          mode
+          resolvedOpSelection
         }
+      }
+      ... on ConflictingExecutionParamsError {
+        message
+      }
+      ... on PresetNotFoundError {
+        preset
+        message
+      }
+      ... on RunConfigValidationInvalid {
+        pipelineName
+        errors {
+          __typename
+          message
+          path
+          reason
+        }
+      }
+      ... on PipelineNotFoundError {
+        message
+        pipelineName
+      }
+      ... on PythonError {
+        ...errorFragment
       }
     }
   }
