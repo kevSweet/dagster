@@ -3010,10 +3010,6 @@ type LaunchRunSuccess implements LaunchPipelineRunSuccess {
   run: Run!
 }
 
-type LaunchMultipleRunsSuccess {
-  runs: [LaunchRunSuccess!]!
-}
-
 union RunsOrError = Runs | InvalidPipelineRunsFilterError | PythonError
 
 type Runs implements PipelineRuns {
