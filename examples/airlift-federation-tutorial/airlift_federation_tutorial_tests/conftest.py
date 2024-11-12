@@ -6,12 +6,28 @@ from pathlib import Path
 from typing import Generator
 
 import pytest
+from dagster_airlift.core import AirflowInstance, AirflowBasicAuthBackend
 from dagster_airlift.test.shared_fixtures import stand_up_airflow, stand_up_dagster
 
 
 def makefile_dir() -> Path:
     return Path(__file__).parent.parent
 
+def airflow_test_instance(port: int) -> AirflowInstance:
+    return AirflowInstance(
+        auth_backend=AirflowBasicAuthBackend(
+            webserver_url=f"http://localhost:{port}",
+            username="admin",
+            password="admin",
+        ),
+        name="test",
+    )
+
+def upstream_instance() -> AirflowInstance:
+    return airflow_test_instance(8081)
+
+def downstream_instance() -> AirflowInstance:
+    return airflow_test_instance(8082)
 
 @pytest.fixture(name="local_env")
 def local_env_fixture() -> Generator[None, None, None]:
@@ -88,3 +104,9 @@ def replace_file(old_file: Path, new_file: Path) -> Generator[None, None, None]:
 
 
 ORIG_DEFS_FILE = makefile_dir() / "airlift_federation_tutorial" / "dagster_defs" / "definitions.py"
+
+def assert_successful_dag_run(af_instance: AirflowInstance, dag_id: str) -> None:
+    run_id = af_instance.trigger_dag(dag_id)
+    assert run_id is not None
+    af_instance.wait_for_run_completion(dag_id=dag_id, run_id=run_id)
+    assert af_instance.get_run_state(dag_id=dag_id, run_id=run_id) == "success"
